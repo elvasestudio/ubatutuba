@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UBATUTUBA® — seu amigo do mar</title>
+  <meta name="description" content="O mascote de Ubatuba. Cute Coastal Lifestyle Brand.">
+
+  <!-- ── Fonts ─────────────────────────────────────────────── -->
+  <style>
+    @font-face { font-family:'ComicCAT'; src:url('assets/fonts/Comic_CAT.otf') format('opentype'); font-weight:400; font-display:swap; }
+    @font-face { font-family:'IntroScript'; src:url('assets/fonts/IntroScript-Medium.ttf') format('truetype'); font-weight:400; font-display:swap; }
+    @font-face { font-family:'IntroScript'; src:url('assets/fonts/IntroScript-Bold.ttf') format('truetype'); font-weight:700; font-display:swap; }
+    @font-face { font-family:'Satoshi'; src:url('assets/fonts/Satoshi-Regular.woff2') format('woff2'); font-weight:400; font-display:swap; }
+    @font-face { font-family:'Satoshi'; src:url('assets/fonts/Satoshi-Medium.woff2') format('woff2'); font-weight:500; font-display:swap; }
+    @font-face { font-family:'Satoshi'; src:url('assets/fonts/Satoshi-Bold.woff2') format('woff2'); font-weight:700; font-display:swap; }
+  </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+  <style>
+    /* ─── RESET ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── TOKENS ─────────────────────────────────────────── */
+    :root {
+      --white:   #FFFFFF;
+      --cream:   #F5F2EC;
+      --black:   #0D0D0D;
+      --navy:    #01254B;
+      --grey:    #666666;
+      --grey2:   #999999;
+      --border:  #E8E8E8;
+      --blue:    #5B9BD5;
+      --blue-lt: #EAF3FB;
+      --sky:     #C4DCEF;
+      --orange:  #fda842;
+
+      --ff-brand:  'ComicCAT', 'Comic Sans MS', cursive;
+      --ff-script: 'IntroScript', cursive;
+      --ff-body:   'Satoshi', -apple-system, sans-serif;
+
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html { scroll-behavior: auto; }
+
+    body {
+      font-family: var(--ff-body);
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── CURSOR — shark head ────────────────────────────── */
+    @media (pointer: fine) { body, a, button { cursor: none; } }
+
+    #cursor {
+      display: none; position: fixed;
+      width: 40px; height: 40px;
+      border-radius: 0;
+      background: transparent;
+      background-image: url('exports/PNG/Ubatutuba - Personagem & identidade Visual-26.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: width 200ms, height 200ms, opacity 200ms;
+    }
+    @media (pointer: fine) { #cursor { display: block; } }
+    #cursor.big { width: 56px; height: 56px; opacity: 0.8; }
+
+    /* ─── HEADER ─────────────────────────────────────────── */
+    #hdr {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 56px;
+      transition: background 350ms var(--ease), box-shadow 350ms var(--ease);
+    }
+    #hdr.on {
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.07);
+    }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { height: 42px; width: auto; filter: brightness(0); }
+    .logo-name { font-family: var(--ff-brand); font-size: 18px; color: var(--black); letter-spacing: 0.01em; }
+    .hdr-nav { display: flex; align-items: center; gap: 36px; }
+    .hdr-nav a {
+      font-size: 14px; font-weight: 500; color: var(--grey);
+      text-decoration: none; position: relative; transition: color 180ms;
+    }
+    .hdr-nav a::after {
+      content: ''; position: absolute; bottom: -3px; left: 0;
+      width: 0; height: 1.5px; background: var(--blue);
+      transition: width 300ms var(--ease);
+    }
+    .hdr-nav a:hover { color: var(--black); }
+    .hdr-nav a:hover::after, .hdr-nav a.act::after { width: 100%; }
+    .hdr-nav a.act { color: var(--blue); }
+
+    /* ─── BUTTONS ─────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--ff-body); font-weight: 600; font-size: 14px;
+      border-radius: 100px; padding: 12px 26px; border: none;
+      text-decoration: none; letter-spacing: 0.01em;
+      transition: transform 200ms var(--ease), box-shadow 200ms var(--ease),
+                  background 180ms, color 180ms, border-color 180ms;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-dark { background: var(--black); color: var(--white); }
+    .btn-dark:hover { box-shadow: 0 10px 32px rgba(0,0,0,0.2); background: var(--navy); }
+    .btn-blue { background: var(--blue); color: var(--white); font-size: 15px; padding: 14px 32px; }
+    .btn-blue:hover { box-shadow: 0 12px 36px rgba(91,155,213,0.38); }
+    .btn-outline { background: transparent; color: var(--blue); border: 1.5px solid var(--blue); font-size: 15px; padding: 14px 32px; }
+    .btn-outline:hover { background: var(--blue); color: var(--white); }
+    .btn-wa { background: var(--black); color: var(--white); font-size: 15px; padding: 16px 36px; }
+    .btn-wa:hover { box-shadow: 0 12px 36px rgba(0,0,0,0.22); background: var(--navy); }
+
+    /* ─── ATOMS ──────────────────────────────────────────── */
+    .lbl {
+      display: block; font-size: 10.5px; font-weight: 600;
+      letter-spacing: 0.13em; text-transform: uppercase;
+      color: var(--blue); margin-bottom: 14px;
+    }
+    .body { font-size: 17px; color: var(--grey); line-height: 1.75; }
+
+    /* ─── 01 · HERO ──────────────────────────────────────── */
+    #hero {
+      min-height: 100vh; background: var(--white);
+      position: relative; overflow: hidden;
+    }
+
+    /* Shark — absolute left, fills full viewport height, no clipping */
+    .hero-mascote {
+      position: absolute;
+      left: 0; top: 0;
+      width: 62%; height: 100%;
+      pointer-events: none; overflow: visible;
+    }
+    #heroWrap {
+      position: absolute;
+      bottom: 0; left: -10px;
+    }
+    .hero-img {
+      height: 100vh;
+      max-height: 1020px;
+      width: auto;
+      max-width: none;
+      filter: drop-shadow(0 60px 100px rgba(91,155,213,0.18));
+    }
+
+    /* Text — overlaid right side */
+    .hero-text {
+      position: absolute;
+      right: 6%; top: 50%;
+      transform: translateY(-50%);
+      width: 38%; max-width: 460px;
+      z-index: 10;
+      display: flex; flex-direction: column;
+    }
+    .hero-script {
+      font-family: var(--ff-script); font-size: 26px;
+      color: var(--blue); display: block; margin-bottom: 12px;
+    }
+    .hero-title {
+      font-family: var(--ff-brand);
+      font-size: clamp(72px, 9vw, 116px);
+      line-height: 0.93; letter-spacing: 0.01em;
+      color: var(--black); margin-bottom: 24px;
+    }
+    .hero-sub {
+      font-size: 17px; color: var(--grey);
+      line-height: 1.7; max-width: 380px; margin-bottom: 40px;
+    }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    /* ─── 02 · FULL-SCREEN BEACH ─────────────────────────── */
+    #fullscreen {
+      height: 100vh; overflow: hidden; position: relative;
+    }
+    #fullscreen img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      display: block;
+    }
+
+    /* ─── 03 · PERSONAGEM ────────────────────────────────── */
+    #personagem {
+      padding: 140px 80px;
+      display: grid; grid-template-columns: 48% 52%;
+      gap: 72px; align-items: center;
+      background: var(--white);
+    }
+    .pers-script {
+      font-family: var(--ff-script); font-size: 22px;
+      color: var(--blue); display: block; margin-bottom: 16px;
+    }
+    .pers-title {
+      font-family: var(--ff-brand);
+      font-size: clamp(52px, 6.5vw, 88px);
+      line-height: 0.92; letter-spacing: 0.01em;
+      color: var(--black); margin-bottom: 28px;
+    }
+    .pers-img-wrap {
+      border-radius: 28px; overflow: hidden;
+      position: relative; cursor: none;
+    }
+    .pers-img-wrap img {
+      width: 100%; height: 520px;
+      object-fit: cover; object-position: center;
+      display: block;
+      transition: transform 700ms var(--ease);
+    }
+    .pers-img-wrap:hover img { transform: scale(1.03); }
+
+    /* ─── 04 · TIRAS ─────────────────────────────────────── */
+    #tiras {
+      background: var(--white);
+      padding: 72px 80px 80px;
+    }
+    .tira {
+      max-width: 1100px; margin: 0 auto 12px;
+      border-radius: 20px; overflow: hidden;
+    }
+    .tira img {
+      width: 116%; height: 200px;
+      object-fit: cover; object-position: center;
+      display: block; margin-left: -8%;
+    }
+
+    /* ─── 05 · MASCOTE ANCHOR ────────────────────────────── */
+    #mascote-anchor {
+      position: relative; overflow: hidden;
+      background: var(--cream);
+    }
+    .anc-img {
+      width: 100%; height: auto;
+      display: block;
+    }
+    .anc-meta {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 48px 64px;
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+    .anc-tagline {
+      font-family: var(--ff-script); font-size: 22px;
+      color: rgba(1,37,75,0.4);
+    }
+    .anc-icon { height: 36px; width: auto; opacity: 0.3; }
+
+    /* ─── 06 · GALERIA ────────────────────────────────────── */
+    #galeria {
+      background: var(--black);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 4px; padding: 4px;
+    }
+    .gal-item { overflow: hidden; cursor: none; }
+    .gal-item img {
+      width: 100%; height: 480px;
+      object-fit: cover; display: block;
+      transition: transform 700ms var(--ease);
+    }
+    .gal-item:hover img { transform: scale(1.04); }
+
+    /* ─── 07 · STICKERS ──────────────────────────────────── */
+    #stickers {
+      background: var(--orange);
+      overflow: hidden;
+    }
+    .stk-body { padding: 80px 80px 100px; }
+    .stk-stage {
+      position: relative; width: 100%;
+      max-width: 1100px; height: 500px; margin: 0 auto;
+    }
+    .stk { position: absolute; opacity: 0; }
+    .stk img {
+      width: 100%; height: 100%; object-fit: contain;
+      filter: drop-shadow(0 8px 28px rgba(0,0,0,0.12));
+    }
+    /* 4 por linha, equidistantes */
+    .stk-1 { width:170px; height:170px; top:12px;  left:1%;   }
+    .stk-2 { width:186px; height:186px; top:0;     left:24%;  }
+    .stk-3 { width:174px; height:174px; top:18px;  left:49%;  }
+    .stk-4 { width:162px; height:162px; top:4px;   left:74%;  }
+    .stk-5 { width:176px; height:176px; top:262px; left:9%;   }
+    .stk-6 { width:184px; height:184px; top:250px; left:32%;  }
+    .stk-7 { width:168px; height:168px; top:268px; left:57%;  }
+    .stk-8 { width:178px; height:178px; top:252px; left:80%;  }
+
+    /* ─── 08 · PRODUTOS ──────────────────────────────────── */
+    #produtos {
+      background: var(--white);
+      padding: 100px 80px 120px;
+    }
+    .prod-hd { margin-bottom: 72px; }
+    .prod-hd-script {
+      font-family: var(--ff-script);
+      font-size: clamp(44px, 5.5vw, 72px);
+      line-height: 1.1; color: var(--black);
+      margin-bottom: 16px; display: block;
+    }
+    .prod-hd-sub { font-size: 17px; color: var(--grey); }
+
+    .prod-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 96px;
+    }
+    .prod-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 72px;
+    }
+    .prod-row-img {
+      display: flex;
+      justify-content: center;
+    }
+    .prod-row-img img {
+      max-height: 480px;
+      width: auto;
+      max-width: 100%;
+      filter: drop-shadow(0 32px 80px rgba(0,0,0,0.14));
+      transition: transform 500ms var(--ease);
+    }
+    .prod-row:hover .prod-row-img img { transform: translateY(-18px); }
+    .prod-row-text { padding: 8px 0; }
+    .prod-row.alt .prod-row-img { order: 2; }
+    .prod-row.alt .prod-row-text { order: 1; }
+    .prod-name {
+      font-family: var(--ff-script); font-size: clamp(36px, 4vw, 54px);
+      color: var(--black); margin-bottom: 16px; line-height: 1;
+    }
+    .prod-desc { font-size: 16px; color: var(--grey); line-height: 1.7; max-width: 380px; }
+    /* Duo image (camisas) */
+    .prod-row-img--duo {
+      position: relative; display: flex; justify-content: center; align-items: flex-end;
+    }
+    .prod-row-img--duo img:first-child {
+      max-height: 460px; width: auto; max-width: 100%;
+      filter: drop-shadow(0 32px 80px rgba(0,0,0,0.14));
+      transition: transform 500ms var(--ease); z-index: 2; position: relative;
+    }
+    .prod-img-b {
+      position: absolute; right: 0; bottom: 0;
+      max-height: 200px !important; width: auto !important;
+      filter: drop-shadow(0 16px 40px rgba(0,0,0,0.18)) !important;
+      border-radius: 12px; z-index: 1;
+    }
+    .prod-row:hover .prod-row-img--duo img:first-child { transform: translateY(-18px) translateX(-8px); }
+
+    /* Em breve */
+    .prod-soon {
+      text-align: center; margin-top: 96px; padding-top: 72px;
+      border-top: 1px solid var(--border);
+    }
+    .prod-soon-label {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--grey2); margin-bottom: 20px; display: block;
+    }
+    .prod-soon-tags {
+      display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    }
+    .prod-soon-tags span {
+      padding: 8px 20px; border: 1.5px solid var(--border);
+      border-radius: 100px; font-size: 14px; color: var(--grey);
+      font-weight: 500;
+    }
+
+    /* Nota da loja */
+    .prod-shop { margin-top: 64px; }
+    .prod-shop-inner {
+      max-width: 640px; margin: 0 auto; text-align: center;
+      background: var(--cream); border-radius: 24px;
+      padding: 48px 48px;
+    }
+    .prod-shop-badge {
+      display: inline-block; padding: 5px 14px; border-radius: 100px;
+      background: rgba(91,155,213,0.12); color: var(--blue);
+      font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .prod-shop-text {
+      font-size: 16px; color: var(--grey); line-height: 1.7; margin-bottom: 28px;
+    }
+    .prod-shop-text strong { color: var(--black); font-weight: 600; }
+    .prod-shop-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    .prod-buy {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 28px;
+      padding: 14px 32px;
+      background: var(--navy); color: var(--white);
+      font-family: var(--ff-body); font-size: 14px; font-weight: 600;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      border-radius: 100px; text-decoration: none;
+      transition: background 220ms var(--ease), transform 220ms var(--ease), box-shadow 220ms var(--ease);
+    }
+    .prod-buy:hover { background: var(--blue); transform: translateY(-3px); box-shadow: 0 12px 36px rgba(91,155,213,0.32); }
+    .prod-buy svg { transition: transform 220ms var(--ease); }
+    .prod-buy:hover svg { transform: translateX(4px); }
+
+    .prod-cta { text-align: center; margin-top: 72px; }
+
+    /* ─── 09 · CONTATO ──────────────────────────────────── */
+    #contato {
+      background: var(--navy);
+      padding: 120px 80px;
+      position: relative; overflow: hidden;
+    }
+    #contato::before {
+      content: '';
+      position: absolute;
+      top: -180px; right: -180px;
+      width: 560px; height: 560px;
+      background: radial-gradient(circle, rgba(91,155,213,0.13) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .ct-inner { max-width: 680px; margin: 0 auto; }
+    .ct-inner .lbl { color: var(--sky); }
+    .ct-title {
+      font-family: var(--ff-script);
+      font-size: clamp(44px, 5.5vw, 70px);
+      color: var(--white); margin-bottom: 16px; line-height: 1.1;
+    }
+    .ct-title em { font-style: normal; color: var(--sky); }
+    .ct-sub {
+      font-size: 17px; color: rgba(255,255,255,0.52);
+      line-height: 1.7; margin-bottom: 52px;
+    }
+    .ct-form { display: flex; flex-direction: column; gap: 14px; }
+    .ct-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .ct-input, .ct-textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.07);
+      border: 1.5px solid rgba(255,255,255,0.11);
+      border-radius: 14px;
+      padding: 16px 20px;
+      font-family: var(--ff-body); font-size: 15px;
+      color: var(--white); outline: none;
+      transition: border-color 250ms, background 250ms;
+    }
+    .ct-input::placeholder, .ct-textarea::placeholder { color: rgba(255,255,255,0.28); }
+    .ct-input:focus, .ct-textarea:focus {
+      border-color: var(--blue);
+      background: rgba(255,255,255,0.11);
+    }
+    .ct-textarea { resize: vertical; min-height: 140px; }
+    .ct-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; }
+
+    /* ─── FOOTER ─────────────────────────────────────────── */
+    footer {
+      background: var(--sky);
+      padding: 72px 56px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 10px; text-align: center;
+    }
+    .ft-icon { height: 60px; width: auto; margin-bottom: 8px; filter: invert(8%) sepia(76%) saturate(1196%) hue-rotate(191deg) brightness(94%) contrast(104%); }
+    .ft-brand { font-family: var(--ff-brand); font-weight: 400; font-size: 26px; color: var(--navy); letter-spacing: 0.04em; }
+    .ft-tagline { font-family: var(--ff-script); font-size: 20px; color: rgba(1,37,75,0.52); }
+    .ft-address { font-size: 13px; color: rgba(1,37,75,0.5); line-height: 1.6; margin-top: 4px; }
+    .ft-social { display: flex; align-items: center; gap: 20px; margin-top: 20px; }
+    .ft-social a {
+      display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(1,37,75,0.08);
+      color: var(--navy);
+      transition: background 200ms, transform 200ms;
+      text-decoration: none;
+    }
+    .ft-social a:hover { background: rgba(1,37,75,0.16); transform: translateY(-2px); }
+    .ft-social svg { display: block; }
+    .ft-divider { width: 40px; height: 1px; background: rgba(1,37,75,0.15); margin: 20px auto 16px; }
+    .ft-copy { font-size: 11.5px; color: rgba(1,37,75,0.35); }
+    .ft-studio { font-size: 11.5px; color: rgba(1,37,75,0.28); margin-top: 4px; }
+
+    /* ─── REVEAL ─────────────────────────────────────────── */
+    .rv { opacity: 0; transform: translateY(40px); }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 1060px) {
+      #hero { min-height: 100vh; }
+      .hero-mascote { position: absolute; width: 100%; height: 100%; }
+      #heroWrap { left: 50%; transform: translateX(-50%); bottom: 0; }
+      .hero-img { height: 70vw; max-height: 520px; }
+      .hero-text {
+        position: absolute; right: auto; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%; max-width: 90%;
+        text-align: center;
+        background: rgba(255,255,255,0.82);
+        backdrop-filter: blur(16px);
+        border-radius: 20px;
+        padding: 32px 28px;
+      }
+      .hero-btns { justify-content: center; }
+      .hero-sub { max-width: 100%; }
+
+      #fullscreen { height: 60vh; }
+
+      #personagem { grid-template-columns: 1fr; padding: 100px 40px; gap: 48px; }
+      .pers-img-wrap img { height: 320px; }
+
+      #tiras { padding: 48px 40px 56px; }
+
+      #galeria { grid-template-columns: 1fr; }
+      .gal-item img { height: 280px; }
+
+      #stickers .stk-body { padding: 60px 40px 80px; }
+      .stk-stage { height: 300px; }
+
+      #produtos { padding: 80px 40px 100px; }
+      .prod-row { grid-template-columns: 1fr; gap: 40px; }
+      .prod-row.alt .prod-row-img { order: 0; }
+      .prod-row.alt .prod-row-text { order: 0; }
+      .prod-row-img img { max-height: 320px; }
+
+      #hdr { padding: 16px 24px; }
+      .hdr-nav { display: none; }
+
+      footer { padding: 56px 24px; }
+      #contato { padding: 80px 28px; }
+      .ct-row { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .hero-title { font-size: 72px; }
+      .stk-stage { height: 220px; }
+      .stk-1,.stk-2,.stk-3,.stk-4,.stk-5 { width:90px; height:90px; }
+      .stk-6,.stk-7,.stk-8 { width:110px; height:110px; }
+      .tira img { height: 160px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cursor"></div>
+
+  <!-- ══════════════════════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════════════════════ -->
+  <header id="hdr">
+    <a href="#" class="logo">
+      <img class="logo-icon"
+        src="exports/PNG/Ubatutuba - Personagem & identidade Visual-26.png"
+        alt="UBATUTUBA">
+      <span class="logo-name">UBATUTUBA</span>
+    </a>
+    <nav class="hdr-nav" id="nav">
+      <a href="#personagem">Sobre</a>
+      <a href="#tiras">Universo</a>
+      <a href="#produtos">Colecao</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <a href="https://wa.me/5511933848787?text=Ol%C3%A1!%20Quero%20comprar%20o%20mascote%20UBATUTUBA!"
+       class="btn btn-dark" target="_blank" rel="noopener">
+      Comprar mascote →
+    </a>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════
+       01 · HERO  (mascote esq | texto dir)
+  ══════════════════════════════════════════════════════ -->
+  <section id="hero">
+    <div class="hero-mascote">
+      <div id="heroWrap">
+        <img id="heroImg" class="hero-img"
+          src="exports/PNG/Ubatutuba - Personagem & identidade Visual-08.png"
+          alt="UBATUTUBA mascote" loading="eager">
+      </div>
+    </div>
+
+    <div class="hero-text">
+      <span class="hero-script">seu amigo do mar ®</span>
+      <h1 class="hero-title">UBATU<br>TUBA</h1>
+      <p class="hero-sub">O tubarão mais carismático do litoral brasileiro. Nasceu em Ubatuba para nunca mais sair do seu coração.</p>
+      <div class="hero-btns">
+        <a href="https://wa.me/5511933848787?text=Ol%C3%A1!%20Quero%20comprar%20o%20mascote%20UBATUTUBA!"
+           class="btn btn-blue" target="_blank" rel="noopener">
+          Adquirir o mascote →
+        </a>
+        <a href="#personagem" class="btn btn-outline">Conhecer →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       02 · FULL-SCREEN — imagem editorial wide
+  ══════════════════════════════════════════════════════ -->
+  <div id="fullscreen">
+    <img src="Imagens/ChatGPT Image 22 de mai. de 2026, 15_23_26.png"
+         alt="UBATUTUBA — seu amigo do mar" loading="lazy">
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       03 · O PERSONAGEM
+  ══════════════════════════════════════════════════════ -->
+  <section id="personagem">
+    <div>
+      <span class="pers-script rv">o personagem</span>
+      <h2 class="pers-title rv">UBATU<br>TUBA</h2>
+      <p class="body rv">
+        Nasceu nas praias de Ubatuba para ser seu companheiro de verão, de aventura — e de todas as estações.
+      </p>
+      <p class="body rv" style="margin-top:18px;">
+        Mais do que um mascote: uma propriedade intelectual com alma de lugar e coração de personagem. Um tubarão que ri primeiro e faz amigos antes de fazer ondas.
+      </p>
+    </div>
+
+    <div class="pers-img-wrap rv">
+      <img src="assets/personagem-cena.png"
+           alt="UBATUTUBA personagem" loading="lazy">
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       04 · TIRAS — universo em strips
+  ══════════════════════════════════════════════════════ -->
+  <section id="tiras">
+    <div class="tira">
+      <img src="exports/JPG/Ubatutuba - Personagem & identidade Visual-44.jpg"
+           alt="Ubatuba lifestyle" loading="lazy">
+    </div>
+    <div class="tira">
+      <img src="exports/JPG/Ubatutuba - Personagem & identidade Visual-45.jpg"
+           alt="Surfista" loading="lazy">
+    </div>
+    <div class="tira">
+      <img src="exports/JPG/Ubatutuba - Personagem & identidade Visual-46.jpg"
+           alt="Aquatico" loading="lazy">
+    </div>
+    <div class="tira" style="margin-bottom:0">
+      <img src="exports/JPG/Ubatutuba - Personagem & identidade Visual-47.jpg"
+           alt="Pescador" loading="lazy">
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       06 · GALERIA editorial — 4 imagens grid
+  ══════════════════════════════════════════════════════ -->
+  <section id="galeria">
+    <div class="gal-item">
+      <img src="exports/JPG/Ubatutuba---Personagem-&-identidade-Visual--grid-1.jpg"
+           alt="UBATUTUBA universo" loading="lazy">
+    </div>
+    <div class="gal-item">
+      <img src="exports/JPG/Ubatutuba---Personagem-&-identidade-Visual--grid-2.jpg"
+           alt="UBATUTUBA universo" loading="lazy">
+    </div>
+    <div class="gal-item">
+      <img src="exports/JPG/Ubatutuba---Personagem-&-identidade-Visual--grid-3.jpg"
+           alt="UBATUTUBA universo" loading="lazy">
+    </div>
+    <div class="gal-item">
+      <img src="exports/JPG/Ubatutuba---Personagem-&-identidade-Visual--grid-4.jpg"
+           alt="UBATUTUBA universo" loading="lazy">
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       07 · STICKERS — fundo laranja #fda842
+  ══════════════════════════════════════════════════════ -->
+  <section id="stickers">
+    <div class="stk-body">
+      <div class="stk-stage" id="stkStage">
+        <div class="stk stk-1" data-r="-14">
+          <img src="exports/PNG/selos-stickers/Ubatutuba - Personagem & identidade Visual-57.png" alt="">
+        </div>
+        <div class="stk stk-2" data-r="9">
+          <img src="exports/PNG/selos-stickers/Ubatutuba - Personagem & identidade Visual-58.png" alt="">
+        </div>
+        <div class="stk stk-3" data-r="-6">
+          <img src="exports/PNG/selos-stickers/Ubatutuba - Personagem & identidade Visual-65.png" alt="">
+        </div>
+        <div class="stk stk-4" data-r="13">
+          <img src="exports/PNG/selos-stickers/Ubatutuba - Personagem & identidade Visual-60.png" alt="">
+        </div>
+        <div class="stk stk-5" data-r="-9">
+          <img src="exports/PNG/selos-stickers/Ubatutuba - Personagem & identidade Visual-62.png" alt="">
+        </div>
+        <div class="stk stk-6" data-r="11">
+          <img src="exports/PNG/selos-stickers/Ubatutuba - Personagem & identidade Visual-59.png" alt="">
+        </div>
+        <div class="stk stk-7" data-r="-13">
+          <img src="exports/PNG/selos-stickers/Ubatutuba - Personagem & identidade Visual-61.png" alt="">
+        </div>
+        <div class="stk stk-8" data-r="7">
+          <img src="exports/PNG/selos-stickers/Ubatutuba - Personagem & identidade Visual-63.png" alt="">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       08 · PRODUTOS — sem caixas, imagens flutuando
+  ══════════════════════════════════════════════════════ -->
+  <section id="produtos">
+    <div class="prod-hd rv">
+      <span class="prod-hd-script">Da praia para<br>as suas maos.</span>
+      <p class="prod-hd-sub">Cada produto carrega o espírito de Ubatuba.</p>
+    </div>
+
+    <div class="prod-stack">
+
+      <!-- Chaveiro -->
+      <div class="prod-row rv">
+        <div class="prod-row-img">
+          <img src="exports/PNG/Ubatutuba---Personagem-&-identidade-Visual-chaveiro.png" alt="Chaveiro UBATUTUBA" loading="lazy">
+        </div>
+        <div class="prod-row-text">
+          <div class="prod-name">Chaveiro</div>
+          <p class="prod-desc">Mini pelúcia de bolso. Leve o espírito de Ubatuba onde for.</p>
+          <a href="#contato" class="prod-buy">Comprar agora <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+
+      <!-- Pelúcia colecionável -->
+      <div class="prod-row alt rv">
+        <div class="prod-row-img">
+          <img src="exports/PNG/Ubatutuba---Personagem-&-identidade-Visual-53-  mascote na caixa.png" alt="Pelúcia colecionável UBATUTUBA" loading="lazy">
+        </div>
+        <div class="prod-row-text">
+          <div class="prod-name">Pelúcia</div>
+          <p class="prod-desc">Pelúcia premium na caixinha colecionável. Edição especial para guardar.</p>
+          <a href="#contato" class="prod-buy">Comprar agora <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+
+      <!-- Boné Terry -->
+      <div class="prod-row rv">
+        <div class="prod-row-img">
+          <img src="exports/PNG/Ubatutuba---Personagem-&-identidade-Visual--boné.png" alt="Bone UBATUTUBA" loading="lazy">
+        </div>
+        <div class="prod-row-text">
+          <div class="prod-name">Bone Terry</div>
+          <p class="prod-desc">Terry cloth azul, logo bordado. Da praia para as suas mãos.</p>
+          <a href="#contato" class="prod-buy">Comprar agora <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+
+      <!-- Boneco 3D reciclado -->
+      <div class="prod-row alt rv">
+        <div class="prod-row-img">
+          <img src="exports/PNG/Ubatutuba---Personagem-&-identidade-Visual.png" alt="Boneco 3D UBATUTUBA" loading="lazy">
+        </div>
+        <div class="prod-row-text">
+          <div class="prod-name">Boneco 3D</div>
+          <p class="prod-desc">Feito de plásticos reciclados. Design tridimensional com acabamento premium — colecionável e consciente.</p>
+          <a href="#contato" class="prod-buy">Comprar agora <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+
+      <!-- Mascote de crochê artesanal -->
+      <div class="prod-row rv">
+        <div class="prod-row-img">
+          <img src="exports/PNG/Ubatutuba---Personagem-&-identidade-Visual3.png" alt="Mascote Crochê UBATUTUBA" loading="lazy">
+        </div>
+        <div class="prod-row-text">
+          <div class="prod-name">Mascote Crochê</div>
+          <p class="prod-desc">Feito pelas artesãs de Ubatuba. Cada peça é única, feita à mão com muito amor e identidade local.</p>
+          <a href="#contato" class="prod-buy">Comprar agora <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+
+      <!-- Ecobag -->
+      <div class="prod-row alt rv">
+        <div class="prod-row-img">
+          <img src="exports/Ubatututba-bag/Ecobag - preta - sem fundo.png" alt="Ecobag UBATUTUBA" loading="lazy">
+        </div>
+        <div class="prod-row-text">
+          <div class="prod-name">Ecobag</div>
+          <p class="prod-desc">Bolsa preta com logo bordado. Vai para a praia, para o mercado, para onde você quiser.</p>
+          <a href="#contato" class="prod-buy">Comprar agora <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+
+      <!-- Camisas -->
+      <div class="prod-row rv">
+        <div class="prod-row-img prod-row-img--duo">
+          <img src="exports/Ubatutuba-camisas/Ubatutuba - Personagem & identidade Visual-87.jpg" alt="Camisa UBATUTUBA" loading="lazy">
+          <img src="exports/Ubatutuba-camisas/Ubatutuba - Personagem & identidade Visual-82.jpg" alt="Camisa UBATUTUBA azul" loading="lazy" class="prod-img-b">
+        </div>
+        <div class="prod-row-text">
+          <div class="prod-name">Camisas</div>
+          <p class="prod-desc">100% algodão. Estampas exclusivas com o mascote e identidade visual da marca. Azul, branca e mais cores.</p>
+          <a href="#contato" class="prod-buy">Comprar agora <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Em breve -->
+    <div class="prod-soon rv">
+      <p class="prod-soon-label">Em breve na coleção</p>
+      <div class="prod-soon-tags">
+        <span>Mochila</span><span>Toalha de praia</span><span>Chapéu bucket</span><span>Sacola de fibra</span><span>Caneca</span><span>Porta-copo</span>
+      </div>
+    </div>
+
+    <!-- Nota da loja -->
+    <div class="prod-shop rv">
+      <div class="prod-shop-inner">
+        <span class="prod-shop-badge">Loja ativa</span>
+        <p class="prod-shop-text">Nossa loja opera <strong>sob encomenda</strong>. Cada item é produzido com cuidado após o pedido. Entre em contato pelo formulário, e-mail ou WhatsApp para encomendar o seu.</p>
+        <div class="prod-shop-btns">
+          <a href="#contato" class="btn btn-blue">Fazer pedido →</a>
+          <a href="https://wa.me/5511933848787?text=Ol%C3%A1!%20Quero%20encomendar%20um%20produto%20UBATUTUBA!" class="btn btn-wa" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.833L.057 23.875a.5.5 0 00.611.625l6.244-1.634A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a10 10 0 01-5.35-1.548l-.374-.22-3.865 1.012 1.031-3.77-.244-.39A10 10 0 1122 12 10.01 10.01 0 0112 22z"/></svg>
+            WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       10 · CONTATO
+  ══════════════════════════════════════════════════════ -->
+  <section id="contato">
+    <div class="ct-inner rv">
+      <span class="lbl">Fale com a gente</span>
+      <h2 class="ct-title">Vamos <em>conversar?</em></h2>
+      <p class="ct-sub">Manda uma mensagem ou chama no WhatsApp. A gente responde rapidinho.</p>
+      <form class="ct-form" id="ctForm" onsubmit="sendMail(event)">
+        <div class="ct-row">
+          <input class="ct-input" type="text" id="ctNome" placeholder="Seu nome" required>
+          <input class="ct-input" type="email" id="ctEmail" placeholder="Seu e-mail" required>
+        </div>
+        <textarea class="ct-textarea" id="ctMsg" placeholder="Sua mensagem..." rows="5" required></textarea>
+        <div class="ct-actions">
+          <button class="btn btn-blue" type="submit">Enviar mensagem →</button>
+          <a class="btn btn-wa"
+             href="https://wa.me/5511933848787?text=Ol%C3%A1!%20Vim%20pelo%20site%20UBATUTUBA!"
+             target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.761-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+              <path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.833L.057 23.875a.5.5 0 00.611.625l6.244-1.634A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a10 10 0 01-5.35-1.548l-.374-.22-3.865 1.012 1.031-3.77-.244-.39A10 10 0 1122 12 10.01 10.01 0 0112 22z"/>
+            </svg>
+            WhatsApp direto
+          </a>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       09 · MASCOTE ANCHOR — acima do footer
+  ══════════════════════════════════════════════════════ -->
+  <section id="mascote-anchor">
+    <img class="anc-img"
+      src="exports/JPG/Ubatutuba---Personagem-&-identidade-Visual-mascote.jpg"
+      alt="UBATUTUBA" loading="lazy">
+    <div class="anc-meta">
+      <span class="anc-tagline">seu amigo do mar ®</span>
+      <img class="anc-icon"
+        src="exports/PNG/Ubatutuba - Personagem & identidade Visual-26.png"
+        alt="" loading="lazy">
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════ -->
+  <footer>
+    <img class="ft-icon"
+      src="exports/PNG/Ubatutuba - Personagem & identidade Visual-26.png"
+      alt="UBATUTUBA" loading="lazy">
+    <div class="ft-brand">UBATUTUBA</div>
+    <div class="ft-tagline">seu amigo do mar</div>
+    <div class="ft-address">
+      Praia Grande &nbsp;·&nbsp; Ubatuba &nbsp;·&nbsp; A capital do Surfe &nbsp;·&nbsp; São Paulo
+    </div>
+
+    <div class="ft-social">
+      <!-- WhatsApp -->
+      <a href="https://wa.me/5511933848787?text=Ol%C3%A1!%20Vim%20pelo%20site%20UBATUTUBA!"
+         target="_blank" rel="noopener" aria-label="WhatsApp">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.833L.057 23.875a.5.5 0 00.611.625l6.244-1.634A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a10 10 0 01-5.35-1.548l-.374-.22-3.865 1.012 1.031-3.77-.244-.39A10 10 0 1122 12 10.01 10.01 0 0112 22z"/>
+        </svg>
+      </a>
+      <!-- Instagram -->
+      <a href="https://www.instagram.com/ubatutuba"
+         target="_blank" rel="noopener" aria-label="Instagram">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="ft-divider"></div>
+    <div class="ft-copy">UBATUTUBA® &nbsp;·&nbsp; Todos os Direitos Reservados &nbsp;·&nbsp; 2026</div>
+    <div class="ft-studio">Um produto elvas*studio</div>
+  </footer>
+
+  <!-- ══════════════════════════════════════════════════════
+       SCRIPTS
+  ══════════════════════════════════════════════════════ -->
+  <script>
+    // ── Lenis ──────────────────────────────────────────────
+    const lenis = new Lenis({
+      duration: 1.3,
+      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    });
+    (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })(0);
+
+    // ── GSAP ───────────────────────────────────────────────
+    gsap.registerPlugin(ScrollTrigger);
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+
+    // ── Cursor ─────────────────────────────────────────────
+    const cur = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      gsap.to(cur, { x: e.clientX, y: e.clientY, duration: 0.14, ease: 'power2.out' });
+    });
+    document.querySelectorAll('a, button, .tira, .gal-item, .prod-item, .pers-img-wrap').forEach(el => {
+      el.addEventListener('mouseenter', () => cur.classList.add('big'));
+      el.addEventListener('mouseleave', () => cur.classList.remove('big'));
+    });
+
+    // ── Header ─────────────────────────────────────────────
+    const hdr = document.getElementById('hdr');
+    ScrollTrigger.create({
+      start: 60,
+      onEnter:     () => hdr.classList.add('on'),
+      onLeaveBack: () => hdr.classList.remove('on'),
+    });
+
+    // ── Hero entrance — mascote voa da esquerda com bounce ─
+    gsap.set('#heroWrap',  { opacity:0, x:-180, y:50, scale:0.72, rotation:-14 });
+    gsap.set(['.hero-script','.hero-title','.hero-sub','.hero-btns'], { opacity:0, x:40 });
+
+    const tl = gsap.timeline({ delay: 0.08 });
+    tl
+      .to('#heroWrap', {
+        opacity:1, x:0, y:0, scale:1, rotation:0,
+        duration:1.5, ease:'back.out(1.15)',
+        onComplete() {
+          // Idle: 3-axis organic swim
+          gsap.to('#heroImg', { y:-28, duration:3.8, ease:'sine.inOut', yoyo:true, repeat:-1 });
+          gsap.to('#heroImg', { x:12,  duration:5.5, ease:'sine.inOut', yoyo:true, repeat:-1, delay:0.8 });
+          gsap.to('#heroImg', { rotation:-3.5, duration:4.5, ease:'sine.inOut', yoyo:true, repeat:-1, delay:0.3 });
+        },
+      })
+      .to('.hero-script', { opacity:1, x:0, duration:0.6, ease:'power3.out' }, '-=0.8')
+      .to('.hero-title',  { opacity:1, x:0, duration:0.8, ease:'power3.out' }, '-=0.5')
+      .to('.hero-sub',    { opacity:1, x:0, duration:0.7, ease:'power3.out' }, '-=0.5')
+      .to('.hero-btns',   { opacity:1, x:0, duration:0.6, ease:'power3.out' }, '-=0.5');
+
+    // ── Scroll reveals ─────────────────────────────────────
+    gsap.utils.toArray('.rv').forEach(el => {
+      gsap.to(el, {
+        opacity:1, y:0, duration:0.9, ease:'power3.out',
+        scrollTrigger: { trigger:el, start:'top 88%', toggleActions:'play none none none' },
+      });
+    });
+
+    // ── Tiras — parallax horizontal alternado ──────────────
+    gsap.utils.toArray('.tira').forEach((tira, i) => {
+      const img = tira.querySelector('img');
+      const dir = i % 2 === 0 ? -8 : 8;
+      gsap.fromTo(img,
+        { xPercent: dir },
+        {
+          xPercent: -dir, ease:'none',
+          scrollTrigger: {
+            trigger: tira,
+            start: 'top bottom', end: 'bottom top',
+            scrub: 0.6,
+          },
+        }
+      );
+    });
+
+    // ── Stickers "colar" — animação lenta, recorrente a cada entrada ──
+    const stks = gsap.utils.toArray('.stk');
+    const fromPts = [
+      { x:-240, y:-260, r:-55 }, { x:-90, y:-320, r:38  },
+      { x: 60,  y:-360, r:-22 }, { x:230, y:-260, r:52  },
+      { x:380,  y:-200, r:-38 }, { x:-270, y:80,  r:32  },
+      { x: 90,  y: 250, r:-48 }, { x:330, y:180,  r:18  },
+    ];
+    function playStickers() {
+      stks.forEach((sk, i) => {
+        const fr = fromPts[i] || { x:0, y:-200, r:0 };
+        gsap.fromTo(sk,
+          { opacity:0, x:fr.x, y:fr.y, rotation:fr.r, scale:0.25 },
+          {
+            opacity:1, x:0, y:0,
+            rotation: parseFloat(sk.dataset.r || 0),
+            scale:1, duration:1.1, delay:i*0.13,
+            ease:'back.out(1.4)',
+          }
+        );
+      });
+    }
+    function hideStickers() {
+      stks.forEach(sk => gsap.set(sk, { opacity:0, x:0, y:0, scale:0.25 }));
+    }
+    ScrollTrigger.create({
+      trigger: '#stickers', start: 'top 75%', end: 'bottom 20%',
+      onEnter:     () => playStickers(),
+      onLeave:     () => hideStickers(),
+      onEnterBack: () => playStickers(),
+      onLeaveBack: () => hideStickers(),
+    });
+
+    // ── Nav active ─────────────────────────────────────────
+    const navIds   = ['personagem','tiras','produtos'];
+    const navLinks = document.querySelectorAll('#nav a');
+    navIds.forEach((id, i) => {
+      ScrollTrigger.create({
+        trigger:`#${id}`, start:'top 55%', end:'bottom 55%',
+        onEnter:     () => { navLinks.forEach(l=>l.classList.remove('act')); navLinks[i]?.classList.add('act'); },
+        onLeave:     () => navLinks[i]?.classList.remove('act'),
+        onEnterBack: () => { navLinks.forEach(l=>l.classList.remove('act')); navLinks[i]?.classList.add('act'); },
+        onLeaveBack: () => navLinks[i]?.classList.remove('act'),
+      });
+    });
+
+    // ── Smooth anchor ──────────────────────────────────────
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) { e.preventDefault(); lenis.scrollTo(t, { offset:-80, duration:1.4 }); }
+      });
+    });
+
+    function sendMail(e) {
+      e.preventDefault();
+      const nome = document.getElementById('ctNome').value.trim();
+      const email = document.getElementById('ctEmail').value.trim();
+      const msg  = document.getElementById('ctMsg').value.trim();
+      const sub  = encodeURIComponent('Mensagem pelo site UBATUTUBA — ' + nome);
+      const body = encodeURIComponent('Nome: ' + nome + '\nE-mail: ' + email + '\n\n' + msg);
+      window.location.href = 'mailto:andrelvas@icloud.com?subject=' + sub + '&body=' + body;
+    }
+  </script>
+</body>
+</html>
